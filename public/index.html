@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<head>
+  <title>test</title>
+  <meta charset='utf-8' />
+  <meta name="description" content="mquzz mobile">
+
+  <!-- Mobile viewport optimization h5bp.com/ad -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width">
+
+  <!-- iOS web app, delete if not needed. https://github.com/h5bp/mobile-boilerplate/issues/94 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  <!-- The script prevents links from opening in mobile safari. https://gist.github.com/1042026 -->
+  <script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script>  
+  
+  <!-- Mobile IE allows us to activate ClearType technology for smoothing fonts for easy reading -->
+  <meta http-equiv="cleartype" content="on">
+  
+  <!-- Main Stylesheet -->
+  <link href='css/font/font.css' rel='stylesheet' />
+<!--  
+  <link href='css/ui-darkness/jquery-ui-1.8.21.custom.css' rel='stylesheet' />
+-->  
+  <link href='css/style.css' rel='stylesheet' />
+  <link href='css/mquzz.css' rel='stylesheet' />
+</head>
+<body>
+  <div id="mq-container" class="clearfix">
+    
+    <header id="mq-area-header">
+      <div id="mq-area-header-info">mquzz #24</div>
+      <div id="mq-area-header-help"><div>?</div></div>
+    </header>
+    
+    <div id="mq-area-topper" class="mq-column">
+      <div id="mq-area-topper-cont">
+        <span class="mq-detail-info">datum: 02.05.2012</span>
+        <span class="mq-detail-info">quote: 33%</span>
+      </div>
+    </div>
+    
+    <div id="mq-area-overview" class="mq-column">
+      <ol>
+        <li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li>
+        <li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li>
+        <li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li>
+      </ol>
+    </div>
+    
+    
+    <div id="mq-area-main" class="mq-column">
+      <div id="mq-area-player">
+        <canvas id="mq-player"></canvas>
+      </div>
+      
+      <div id="mq-area-input">
+        <div id="mq-area-input-field">
+          <input name="solution" class="mq-input"></input>
+        </div>
+        <div id="mq-area-input-btn">
+          <a class="mq-button">go</a>
+        </div>
+      </div>
+      
+      <div id="mq-area-hint-v">
+        <div id="mq-area-hint-data">hauptdarsteller ist Jack Nichelson</div>
+      </div>
+      
+      
+      <footer>
+        <div id="mq-area-footer">
+          <div id="mq-area-footer-left" class="mq-footer-col">
+            <span class="mq-btn-nav"><<</span>
+          </div>
+          <div id="mq-area-footer-center" class="mq-footer-col">
+            <span class="mq-btn-nav">start</span>
+          </div>
+          <div id="mq-area-footer-right" class="mq-footer-col">
+            <span class="mq-btn-nav">>></span>
+          </div>
+        </div>
+      </footer>      
+    </div>
+    
+  </div>
+  
+  <script src="js/libs/jquery-1.7.2.min.js"></script>
+  <script src="js/libs/underscore-min.js"></script>
+  <script src="js/libs/buzz.js"></script>
+  <script src="js/libs/hammer.js"></script>
+  
+  <script src="js/mq-player.js"></script>
+
+  <script>
+    
+    $(function() {
+      var rand = -1,
+          mp = mquzz($('#mq-player')),
+          hintEl = $('#mq-area-hint-data'),
+          haHint = new Hammer(hintEl[0]),
+          haPlayer = new Hammer($('#mq-player')[0]);
+          
+      
+      haPlayer.ontap = function(ev) {
+        var mp3s = ['mquzz_021', 'mquzz_022', 'mquzz_023', 'mquzz_025', 'mquzz_026'],
+            url = 'http://mquzz-audio.s3.amazonaws.com/';
+        rand = rand + 1;
+        
+        if (mp.isPlaying()) {
+          mp.stop();
+        } else {
+          //mp.load(url+mp3s[rand]);
+          mp.play('http://mquzz-audio.s3.amazonaws.com/bigfile');
+          //mp.play('http://mquzz-audio.s3.amazonaws.com/mquzz_025');
+        }
+        if (rand === 4){ rand = -1; }        
+        //21...26
+      };
+      
+      
+      haHint.ontap = function(ev) {
+        if (hintEl.width() === 0){
+          $( "#mq-area-hint-v>div" ).animate({ width: '100%' }, 1000);
+        } else {
+          $( "#mq-area-hint-v>div" ).animate({ width: '0px' }, 1000);
+        }
+      };
+
+
+
+      /*
+      var hintEl = $('#mq-area-hint-data');
+      $( "#mq-area-hint-v" ).click(function(e){
+        if (hintEl.width() === 0){
+          $( "#mq-area-hint-v>div" ).animate({ width: '100%' }, 1000);
+        } else {
+          $( "#mq-area-hint-v>div" ).animate({ width: '0px' }, 1000);
+        }
+        
+        
+      });
+      */
+    });
+  </script>  
+
+</body>

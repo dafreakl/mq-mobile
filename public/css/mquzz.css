@@ -1,0 +1,234 @@
+/*--------------------------------------------------------------------------*/
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+body{
+    font-family: RobotoLight;
+    font-size: 1em;    
+    background-color: #0e1013;
+    color: white;
+}
+header{
+    font-family: RobotoLight;
+    font-size: 1.5em;
+    border-bottom: 4px solid #29a0cb;
+    padding: 4px 8px;
+}
+footer{
+    border-top: 4px solid #29a0cb;
+}
+/*--------------------------------------------------------------------------*/
+.mq-column{
+    float: left;
+    display: inline;
+    width: 100%;
+}
+.mq-detail-info{
+    font-family: RobotoLight;
+    font-size: 0.85em;
+    margin-right: 15px;
+}
+.mq-footer-col{
+    display: table-cell;
+}
+.mq-btn-nav{
+    font-family: RobotoThin;
+    font-size: 1.0em;
+    padding: 7px 9px;
+    /*
+    background-color: #29a0cb;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
+    */
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    border: 1px solid white;        
+}
+input.mq-input{
+        font-family: RobotoLight;
+        padding: 15px 5px 7px 5px;
+        width: 100%;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;	
+}
+a.mq-button{
+	font-family: RobotoRegular;
+        font-size: 1.75em;
+        padding: 7px 15px 7px 15px;
+	color: #fff;
+	background-color: #fe57a1;
+	border: 1px solid #da327e;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+        cursor: pointer;
+}
+a.mq-button:hover{
+	background-color: #6299c5;
+	border: 1px solid #6299c5;
+	color: #fff;
+}
+#mq-container{
+    margin: 0 auto;
+}
+/*--------------------------------------------------------------------------*/
+#mq-area-overview{
+    background-color: blue;
+    display: none;
+    visibility: hidden;
+}
+#mq-area-player{
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+#mq-player:hover{
+    cursor: pointer;
+}
+#mq-area-main{
+}
+
+
+#mq-area-header{
+    display: table;
+    width: 100%;
+}
+#mq-area-header-info{
+    display: table-cell;
+}
+#mq-area-header-help{
+    display: table-cell;
+    text-align: center;
+    width: 30px;
+}
+#mq-area-header-help div{
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    border: 1px solid white;    
+}
+
+#mq-area-topper{
+    border-bottom: 1px solid #29a0cb;
+    margin-bottom: 10px;
+    width: 100%;
+}
+#mq-area-topper-cont{
+    margin: 4px 8px;
+}
+
+
+
+#mq-area-input{
+    display: table;
+    width: 100%;
+    margin-bottom: 15px;
+}
+#mq-area-input-field{
+    display: table-cell;
+    padding-right: 10px;
+}
+#mq-area-input-btn{
+    display: table-cell;
+    text-align: left;
+    width: 60px;
+}
+#mq-area-hint-v{
+    margin-bottom: 10px;
+}
+#mq-area-hint-v div{
+    font-family: RobotoThin;
+    font-size: 0.85em;
+    border-right: 18px solid #29a0cb;
+    border-top: 1px solid  #29a0cb;
+    border-bottom: 1px solid  #29a0cb;
+    
+    -webkit-border-top-right-radius: 7px;
+    -webkit-border-bottom-right-radius: 7px;
+    -moz-border-radius-topright: 7px;
+    -moz-border-radius-bottomright: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;    
+    
+    padding-top: 4px;
+    padding-bottom: 4px;
+    width: 0px;
+    height: 25px;
+    overflow: hidden;
+    cursor: pointer;
+}
+#mq-area-footer{
+    margin-top: 17px;
+    display: table;
+    width: 100%;
+}
+#mq-area-footer-left{
+    text-align: left;
+}
+#mq-area-footer-center{
+    text-align: center;
+}
+#mq-area-footer-right{
+    text-align: right;
+}
+
+
+
+
+
+
+
+
+
+/*--------------------------------------------------------------------------*/
+/* SMARTPHONES - PORTRAIT & LANDSCAPE */
+@media
+only screen and (min-device-width: 320px) and (max-device-width: 480px),
+only screen and (min-width: 320px) and (max-width: 480px) {
+    #mq-container{
+        width: 95%;
+    }
+}
+/*--------------------------------------------------------------------------*/
+/* SMARTPHONES - LANDSCAPE */
+@media 
+only screen and (min-width: 321px) {
+    #mq-container{
+        width: 95%;
+    }
+}
+/*--------------------------------------------------------------------------*/
+/* SMARTPHONES - PORTRAIT */
+@media 
+only screen and (max-width: 320px) {
+    #mq-container{
+        width: 95%;
+    }
+}
+/*--------------------------------------------------------------------------*/
+@media 
+only screen and (min-width: 1024px) {
+    #mq-container{
+        width: 70%;
+    }
+    #mq-area-overview{
+        display: block;
+        visibility: visible;
+        width: 40%;
+    }
+    #mq-area-main{
+        width: 60%;
+    }
+    #mq-area-footer-right,
+    #mq-area-footer-center,
+    #mq-area-footer-left{
+        display: none;
+        visibility: hidden;    
+    }    
+}
+/*--------------------------------------------------------------------------*/
