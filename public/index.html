@@ -95,7 +95,6 @@
   <script src="js/mq-player.js"></script>
 
   <script>
-    
     $(function() {
       var rand = -1,
           mp = mquzz($('#mq-player')),
@@ -103,7 +102,6 @@
           haHint = new Hammer(hintEl[0]),
           haPlayer = new Hammer($('#mq-player')[0]);
           
-      
       haPlayer.ontap = function(ev) {
         var mp3s = ['mquzz_021', 'mquzz_022', 'mquzz_023', 'mquzz_025', 'mquzz_026'],
             url = 'http://mquzz-audio.s3.amazonaws.com/';
@@ -119,8 +117,7 @@
         if (rand === 4){ rand = -1; }        
         //21...26
       };
-      
-      
+
       haHint.ontap = function(ev) {
         if (hintEl.width() === 0){
           $( "#mq-area-hint-v>div" ).animate({ width: '100%' }, 1000);
@@ -128,21 +125,6 @@
           $( "#mq-area-hint-v>div" ).animate({ width: '0px' }, 1000);
         }
       };
-
-
-
-      /*
-      var hintEl = $('#mq-area-hint-data');
-      $( "#mq-area-hint-v" ).click(function(e){
-        if (hintEl.width() === 0){
-          $( "#mq-area-hint-v>div" ).animate({ width: '100%' }, 1000);
-        } else {
-          $( "#mq-area-hint-v>div" ).animate({ width: '0px' }, 1000);
-        }
-        
-        
-      });
-      */
     });
   </script>  
 
