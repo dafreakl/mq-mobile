@@ -21,9 +21,6 @@
   
   <!-- Main Stylesheet -->
   <link href='css/font/font.css' rel='stylesheet' />
-<!--  
-  <link href='css/ui-darkness/jquery-ui-1.8.21.custom.css' rel='stylesheet' />
--->  
   <link href='css/style.css' rel='stylesheet' />
   <link href='css/mquzz.css' rel='stylesheet' />
 </head>
@@ -44,7 +41,7 @@
     
     <div id="mq-area-overview" class="mq-column">
       <ol>
-        <li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li>
+        <li data-mq-number=1>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li>
         <li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li>
         <li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li>
       </ol>
@@ -88,44 +85,21 @@
   </div>
   
   <script src="js/libs/jquery-1.7.2.min.js"></script>
-  <script src="js/libs/underscore-min.js"></script>
-  <script src="js/libs/buzz.js"></script>
   <script src="js/libs/hammer.js"></script>
-  
+  <script src="js/libs/underscore-min.js"></script>
+  <script src="js/libs/backbone-min.js"></script>
+  <script src="js/libs/buzz.js"></script>  
   <script src="js/mq-player.js"></script>
+  <script src="js/mq-app.js"></script>
 
+
+  <!--[if lt IE 7]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>
+      window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})
+    </script>
+  <![endif]-->
   <script>
-    $(function() {
-      var rand = -1,
-          mp = mquzz($('#mq-player')),
-          hintEl = $('#mq-area-hint-data'),
-          haHint = new Hammer(hintEl[0]),
-          haPlayer = new Hammer($('#mq-player')[0]);
-          
-      haPlayer.ontap = function(ev) {
-        var mp3s = ['mquzz_021', 'mquzz_022', 'mquzz_023', 'mquzz_025', 'mquzz_026'],
-            url = 'http://mquzz-audio.s3.amazonaws.com/';
-        rand = rand + 1;
-        
-        if (mp.isPlaying()) {
-          mp.stop();
-        } else {
-          //mp.load(url+mp3s[rand]);
-          mp.play('http://mquzz-audio.s3.amazonaws.com/bigfile');
-          //mp.play('http://mquzz-audio.s3.amazonaws.com/mquzz_025');
-        }
-        if (rand === 4){ rand = -1; }        
-        //21...26
-      };
-
-      haHint.ontap = function(ev) {
-        if (hintEl.width() === 0){
-          $( "#mq-area-hint-v>div" ).animate({ width: '100%' }, 1000);
-        } else {
-          $( "#mq-area-hint-v>div" ).animate({ width: '0px' }, 1000);
-        }
-      };
-    });
+    $(function(){ window.quotes.reset({}); });
   </script>  
-
 </body>

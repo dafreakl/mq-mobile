@@ -11,7 +11,8 @@ class Quote
   field :audiourl, :type => String    # url to audio file
   field :addinfo, :type => String     # additional information (optional)
   
-  field :hint, :type => String
+  field :hints, :type => String
+  field :hintl, :type => String
   
   field :commits, :type => Integer, :default => 0
   field :solutions, :type => Integer, :default => 0
@@ -21,5 +22,5 @@ class Quote
   field :stream, :type => String                    # link to videomax/itunes
   field :trailer, :type => String                   # link to youtube
 
-  index :number, unique: true
+  #index({ number: 1 }, { unique: true })
 end

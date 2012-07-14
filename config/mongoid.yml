@@ -2,5 +2,12 @@ development:
   host: localhost
   database: mq2
   
+#development:
+#  sessions:
+#    default:
+#      hosts:
+#        - localhost:27017
+#      database: mq2
+
 production:
   uri: <%= ENV['MONGOLAB_URI'] %>

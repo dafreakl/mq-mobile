@@ -6,6 +6,7 @@ $(function () {
             ctx = canvas.getContext('2d'),
             cw = ch = 0,
             sound = null,
+            soundBuffer = {},
             zeroClock = Math.PI*1.5,
             startAngle = zeroClock,
             endAngle = zeroClock,
@@ -205,6 +206,8 @@ $(function () {
                 } else {
                     sound = new buzz.sound(curl, { formats: [ "mp3" ], preload: true });
                 }
+                
+                soundBuffer[curl] = sound;
 
                 sound.bind('timeupdate', function(e){                    
                     state = STATES.PLAYING;
@@ -237,13 +240,14 @@ $(function () {
             },
             
             play: function (url) {
-                if (_.isNull(sound) || curl !== url) {
-                    this.load(url);
-                } else {
+                if (!_.isUndefined(soundBuffer[url])){
+                    sound = soundBuffer[url];
                     // if the same sound file is restarted its still paused at the last
                     // stop seek and thus it needs to me set to the beginning
                     sound.setTime(0);
-                    sound.play();
+                    sound.play();                    
+                } else {
+                    this.load(url);
                 }
             }
         };
