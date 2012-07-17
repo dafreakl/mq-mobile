@@ -1,0 +1,101 @@
+!!! 5
+%head
+  %title test
+  %meta{'charset' => 'utf-8' }
+  %meta{'name' => 'description', 'content' => 'mquzz ist ein Filmquiz mit einem neuen Zitat täglich. Teste dein Filmwissen auf die andere Art.' }  
+  %meta{'name' => 'author', 'content' => 'Oliver Heck' }
+  %meta{'name' => 'keywords', 'content' => 'filmzitate raten, filmzitat, zitate filme, filmquiz, täglich Zitat' }
+  
+  /Mobile viewport optimization h5bp.com/ad
+  %meta{'name' => 'HandheldFriendly', 'content' => 'True' }
+  %meta{'name' => 'MobileOptimized', 'content' => '320' }
+  %meta{'name' => 'viewport', 'content' => 'width=device-width' }
+  
+  /iOS web app, delete if not needed. https://github.com/h5bp/mobile-boilerplate/issues/94
+  %meta{'name' => 'apple-mobile-web-app-capable', 'content' => 'yes' }
+  %meta{'name' => 'apple-mobile-web-app-status-bar-style', 'content' => 'black' }
+  
+  /The script prevents links from opening in mobile safari. https://gist.github.com/1042026
+  :javascript
+    (function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")
+  
+  /Mobile IE allows us to activate ClearType technology for smoothing fonts for easy reading
+  %meta{'http-equiv' => 'cleartype', 'content' => 'on' }
+  
+  %link(rel="stylesheet" href="css/font/font.css?v=2")
+  %link(rel="stylesheet" href="css/style.css?v=2")
+  %link(rel="stylesheet" href="css/mquzz.css?v=2")
+
+%body
+  %div#mq-container.clearfix
+    %header#mq-area-header
+      %div#mq-area-header-info mquzz #24
+      %div#mq-area-header-help
+        %div ?
+  
+  
+    %div#mq-area-topper.mq-column
+      %div#mq-area-topper-cont
+        %span.mq-detail-info datum: 02.05.2012
+        %span.mq-detail-info quote: 33%  
+    
+    %div#mq-area-overview.mq-column
+      %ol
+        %li{ 'data-mq-number' => '1'} 1
+        %li 2
+        %li 3
+        %li 4
+        %li 5
+        %li 6
+        %li 7
+        %li 8
+        %li 9
+        %li 10
+
+    %div#mq-area-main.mq-column
+      %div#mq-area-player
+        %canvas#mq-player
+      
+      %div#mq-area-input
+        %div#mq-area-input-field
+          %input.mq-input{ 'name' => 'solution' }
+        
+        %div#mq-area-input-btn
+          %a.mq-button go
+      
+      %div#mq-area-hint-v
+        %div#mq-area-hint-data hauptdarsteller ist Jack Nichelson
+      
+      %footer
+        %div#mq-area-footer
+          %div#mq-area-footer-left.mq-footer-col
+            %span.mq-btn-nav <<
+          
+          %div#mq-area-footer-center.mq-footer-col
+            %span.mq-btn-nav start
+            
+          %div#mq-area-footer-right.mq-footer-col
+            %span.mq-btn-nav >>  
+  
+  %script(src="/js/libs/jquery-1.7.2.min.js")
+  %script(src="/js/libs/hammer.js")
+  %script(src="/js/libs/underscore-min.js")
+  %script(src="/js/libs/backbone-min.js")
+  %script(src="/js/libs/buzz.js")
+  
+  %script(src="/js/mq-player.js")
+  %script(src="/js/mq-app.js")
+  
+  /[if lt IE 7]
+    %script(src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js")
+    :javascript
+      window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})
+
+  :javascript
+    $(function(){
+      quotes = new QuoteList;
+      window.quotes.reset(#{@quotes.to_json()});
+      
+      var qv = new QuoteView({model: window.quotes.at(0)});
+      qv.play();      
+    });  

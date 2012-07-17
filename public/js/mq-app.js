@@ -1,4 +1,5 @@
 $(function() {
+/*
   var rand = -1,
       mp = mquzz($('#mq-player')),
       hintEl = $('#mq-area-hint-data'),
@@ -29,6 +30,7 @@ $(function() {
       $( "#mq-area-hint-v>div" ).animate({ width: '0px' }, 1000);
     }
   };
+  */
   
   //----------------------------------------------------------------------------
   //----------------------------------------------------------------------------
@@ -43,7 +45,7 @@ $(function() {
   
   //
   // -------------------------------------------------------------------------
-  var Quote = Backbone.Model.extend({
+  Quote = Backbone.Model.extend({
     
     idAttribute: 'number',
     
@@ -62,10 +64,31 @@ $(function() {
         : false;
     }
   });
-  
   //
   // -------------------------------------------------------------------------  
-  var QuoteList = Backbone.Collection.extend({
+  QuoteView = Backbone.View.extend({
+    
+    play: function () {
+      var baseURL = 'http://mquzz-audio.s3.amazonaws.com/',
+          audiourl = this.model.get('audiourl');
+      
+      if (QuoteView.player.isPlaying()) {
+        QuoteView.player.stop();
+      } else {
+        QuoteView.player.play(baseURL+audiourl);
+      }
+    },
+    
+    render: function () {
+      
+    }
+  }, {
+    // class attribtues
+    player: mquzz($('#mq-player')) //access: QuoteView.player
+  });
+  //
+  // -------------------------------------------------------------------------  
+  QuoteList = Backbone.Collection.extend({
     model: Quote,
     
     select : function (quote) {
@@ -73,11 +96,7 @@ $(function() {
     }
   });
   
-  var QuoteView = Backbone.View.extend({
-  
-  });
-  
-  var QuoteListView = Backbone.View.extend({
+  QuoteListView = Backbone.View.extend({
     el: $('#mq-area-overview ol')
   });
   

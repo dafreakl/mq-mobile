@@ -24,3 +24,8 @@ class Quote
 
   #index({ number: 1 }, { unique: true })
 end
+
+
+
+
+ 

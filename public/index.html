@@ -100,6 +100,17 @@
     </script>
   <![endif]-->
   <script>
-    $(function(){ window.quotes.reset({}); });
+    $(function(){      
+      var dummy = [ {number: 1, qdate: '02/27/2012', titles: ['the dark knight', 'der dunkle ritter'], audiourl: 'mquzz_024', hints: 'comicverfilmung', hintl: 'comicvermiflmung von nolan'},
+                    {number: 2, qdate: '03/27/2012', titles: ['iron man'], audiourl: 'mquzz_025', hints: 'dc comic', hintl: 'dritter teil gerade in der mache'}];     
+      quotes = new QuoteList;
+      window.quotes.reset(#{@quotes.to_json()});
+      
+      var qq = quotes.at(0);
+      qq.fetch(); // test the url
+      
+
+      
+    });
   </script>  
 </body>
