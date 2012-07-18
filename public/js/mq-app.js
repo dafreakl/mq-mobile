@@ -83,7 +83,6 @@ $(function() {
       
     }
   }, {
-    // class attribtues
     player: mquzz($('#mq-player')) //access: QuoteView.player
   });
   //
@@ -97,7 +96,24 @@ $(function() {
   });
   
   QuoteListView = Backbone.View.extend({
-    el: $('#mq-area-overview ol')
+    el: $('#mq-area-overview ol'),
+    
+    template: _.template($('#mq-tmpl-quotes').html()),
+    
+    events: {
+      'click li': 'clicked'
+    },
+    
+    clicked: function (evt) {
+      var ct = $(evt.currentTarget),
+          id = ct.attr('data-mq-number');
+      alert('clicked on: '+id);
+    },
+    
+    render: function () {
+      $(this.el).empty();
+      $(this.el).append( this.template({quotes: this.collection}) );
+    }
   });
   
 });

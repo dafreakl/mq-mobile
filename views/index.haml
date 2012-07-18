@@ -41,16 +41,6 @@
     
     %div#mq-area-overview.mq-column
       %ol
-        %li{ 'data-mq-number' => '1'} 1
-        %li 2
-        %li 3
-        %li 4
-        %li 5
-        %li 6
-        %li 7
-        %li 8
-        %li 9
-        %li 10
 
     %div#mq-area-main.mq-column
       %div#mq-area-player
@@ -97,5 +87,13 @@
       window.quotes.reset(#{@quotes.to_json()});
       
       var qv = new QuoteView({model: window.quotes.at(0)});
-      qv.play();      
-    });  
+      qv.play();
+      
+      var qq = new QuoteListView({collection: quotes});
+      qq.render();
+    });
+    
+  %script{ :type => 'text/template', :id => 'mq-tmpl-quotes' }
+    <% quotes.each(function(quote){ %>
+    <li data-mq-number='<%= quote.get('number') %>'><%= quote.get('number') %></li>
+    <% }); %>
