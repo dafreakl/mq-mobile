@@ -33,6 +33,9 @@ footer{
 .mq-footer-col{
     display: table-cell;
 }
+.mq-footer-col span:hover{
+    cursor: pointer;
+}
 .mq-btn-nav{
     font-family: RobotoThin;
     font-size: 1.0em;

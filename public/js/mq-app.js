@@ -46,11 +46,14 @@ $(function() {
   //
   // -------------------------------------------------------------------------
   Quote = Backbone.Model.extend({
-    
     idAttribute: 'number',
     
     urlRoot : '/api/v1/quote',
     
+    defaults: {
+        "current":  false
+    },
+
     setEvaluated: function(){
       if(supports_local_storage()){
         localStorage.setItem(this.get("number"), 'true');
@@ -66,7 +69,67 @@ $(function() {
   });
   //
   // -------------------------------------------------------------------------  
+  QuoteList = Backbone.Collection.extend({
+    model: Quote,
+    
+    initialize: function () {
+      this.idx = 0; //current quote
+    },
+    
+    home: function () {
+      this.select(this.at(this.length-1));
+      this.current().trigger('chosen');
+      return this.current();
+    },
+    
+    next: function () {
+      if (!this.hasNext()) {
+        return null;
+      }
+      this.idx += 1;
+      this.current().trigger('chosen');
+      return this.current();
+    },
+    
+    prev: function () {
+      if (!this.hasPrev()) {
+        return null;
+      }
+      this.idx -= 1;
+      this.current().trigger('chosen');
+      return this.current();
+    },
+    
+    hasNext: function () {
+      return this.idx < this.length-1;    
+    },
+    
+    hasPrev: function () {
+      return this.idx > 0;
+    },
+    
+    current: function () {
+      return this.at(this.idx);
+    },
+    
+    select : function (quoteNr) {
+      var quote = this.get(quoteNr);
+
+      this.idx = this.indexOf(quote);
+      this.invoke('set', {current: false}, {silent: true});
+      quote.set({current: true}, {silent: false});
+
+      return this;
+    }
+  });  
+  //
+  // -------------------------------------------------------------------------  
   QuoteView = Backbone.View.extend({
+    
+    initialize: function () {
+      this.model.on('change:current', this.render, this);
+      this.model.on('chosen', this.render, this);
+    },
     
     play: function () {
       var baseURL = 'http://mquzz-audio.s3.amazonaws.com/',
@@ -80,34 +143,55 @@ $(function() {
     },
     
     render: function () {
-      
+      QuoteView.elInfo.html('mquzz #' + this.model.get('number'));
+      QuoteView.elDate.html('datum: ' + this.model.get('qdate')); //qdate
+      QuoteView.elPerc.html('quote: 22 %');
     }
   }, {
+    
+    elInfo: $('#mq-area-header-info'),
+    
+    elDate: $('#mq-area-topper-date'),
+  
+    elPerc: $('#mq-area-topper-perc'),
+    
     player: mquzz($('#mq-player')) //access: QuoteView.player
   });
   //
-  // -------------------------------------------------------------------------  
-  QuoteList = Backbone.Collection.extend({
-    model: Quote,
-    
-    select : function (quote) {
-      var newNumber = _.isObject(quote) ? quote.get('number') : quote;
-    }
-  });
-  
+  // -------------------------------------------------------------------------    
   QuoteListView = Backbone.View.extend({
     el: $('#mq-area-overview ol'),
+    
+    elNext: $('#mq-area-footer-right'),
+    elHome: $('#mq-area-footer-center'),
+    elPrev: $('#mq-area-footer-left'),
     
     template: _.template($('#mq-tmpl-quotes').html()),
     
     events: {
-      'click li': 'clicked'
+      'click li': 'onClick'
     },
     
-    clicked: function (evt) {
+    initialize: function () {
+      var that = this;
+      this.views = [];
+      this.collection.on('reset', this.reset, this);
+      
+      this.elNext.click(function (evt) { that.collection.next(); });
+      this.elHome.click(function (evt) { that.collection.home(); });
+      this.elPrev.click(function (evt) { that.collection.prev(); });
+    },
+    
+    reset: function () {
+      this.collection.each(function (quote){
+        this.views.push(new QuoteView({model: quote}));
+      }, this);
+    },
+
+    onClick: function (evt) {
       var ct = $(evt.currentTarget),
           id = ct.attr('data-mq-number');
-      alert('clicked on: '+id);
+      this.collection.select(id);
     },
     
     render: function () {

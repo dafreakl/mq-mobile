@@ -36,8 +36,8 @@
   
     %div#mq-area-topper.mq-column
       %div#mq-area-topper-cont
-        %span.mq-detail-info datum: 02.05.2012
-        %span.mq-detail-info quote: 33%  
+        %span#mq-area-topper-date.mq-detail-info datum: 02.05.2012
+        %span#mq-area-topper-perc.mq-detail-info quote: 33%  
     
     %div#mq-area-overview.mq-column
       %ol
@@ -83,13 +83,14 @@
 
   :javascript
     $(function(){
-      quotes = new QuoteList;
-      window.quotes.reset(#{@quotes.to_json()});
-      
-      var qv = new QuoteView({model: window.quotes.at(0)});
-      qv.play();
-      
+      quotes = new QuoteList;      
       var qq = new QuoteListView({collection: quotes});
+      
+      //var qv = new QuoteView({model: window.quotes.at(0)});
+      //qv.play();
+      
+      window.quotes.reset(#{@quotes.to_json()});
+      window.quotes.home();
       qq.render();
     });
     
