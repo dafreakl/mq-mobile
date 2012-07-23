@@ -42,7 +42,6 @@ $(function() {
       return false;
     }
   }
-  
   //
   // -------------------------------------------------------------------------
   Quote = Backbone.Model.extend({
@@ -54,6 +53,14 @@ $(function() {
         "current":  false
     },
 
+    play: function () {
+      this.trigger('play');
+    },
+    
+    hint: function () {
+      this.trigger('hint');
+    },
+    
     setEvaluated: function(){
       if(supports_local_storage()){
         localStorage.setItem(this.get("number"), 'true');
@@ -76,27 +83,39 @@ $(function() {
       this.idx = 0; //current quote
     },
     
-    home: function () {
+    home: function (stop) {
       this.select(this.at(this.length-1));
       this.current().trigger('chosen');
+      if (stop) {
+        this.current().trigger('hide');
+        this.current().trigger('stop');
+      }
       return this.current();
     },
     
-    next: function () {
+    next: function (stop) {
       if (!this.hasNext()) {
         return null;
       }
       this.idx += 1;
       this.current().trigger('chosen');
+      if (stop) {
+        this.current().trigger('hide');
+        this.current().trigger('stop');
+      }
       return this.current();
     },
     
-    prev: function () {
+    prev: function (stop) {
       if (!this.hasPrev()) {
         return null;
       }
       this.idx -= 1;
       this.current().trigger('chosen');
+      if (stop) {
+        this.current().trigger('hide');
+        this.current().trigger('stop');
+      }
       return this.current();
     },
     
@@ -129,6 +148,10 @@ $(function() {
     initialize: function () {
       this.model.on('change:current', this.render, this);
       this.model.on('chosen', this.render, this);
+      this.model.on('play', this.play, this);
+      this.model.on('stop', this.stop, this);
+      this.model.on('hint', this.hint, this);
+      this.model.on('hide', this.hide, this);
     },
     
     play: function () {
@@ -142,26 +165,54 @@ $(function() {
       }
     },
     
+    stop: function () {
+      if (QuoteView.player.isPlaying()) {
+        QuoteView.player.stop();
+      }
+    },
+    
+    show: function (duration) {
+      if (duration) {
+        $('#mq-area-hint-v>div').animate({width: '100%'}, duration);
+      } else {
+        $('#mq-area-hint-v>div').width('0px');
+      }
+    },
+    
+    hide: function (duration) {
+      if (duration) {
+        $('#mq-area-hint-v>div').animate({width: '0px'}, duration);
+      } else {
+        $('#mq-area-hint-v>div').width('0px');
+      }
+    },
+    
+    hint: function () {
+      if (QuoteView.elHint.width() === 0){
+        this.show(1000);
+      } else {
+        this.hide(1000);
+      }
+    },
+    
     render: function () {
       QuoteView.elInfo.html('mquzz #' + this.model.get('number'));
       QuoteView.elDate.html('datum: ' + this.model.get('qdate')); //qdate
       QuoteView.elPerc.html('quote: 22 %');
+      QuoteView.elHint.html(this.model.get('hints'));
     }
   }, {
-    
     elInfo: $('#mq-area-header-info'),
-    
     elDate: $('#mq-area-topper-date'),
-  
     elPerc: $('#mq-area-topper-perc'),
-    
+    elHint: $('#mq-area-hint-data'),
     player: mquzz($('#mq-player')) //access: QuoteView.player
   });
   //
   // -------------------------------------------------------------------------    
   QuoteListView = Backbone.View.extend({
     el: $('#mq-area-overview ol'),
-    
+    elHelp: $('#mq-area-header-help'),
     elNext: $('#mq-area-footer-right'),
     elHome: $('#mq-area-footer-center'),
     elPrev: $('#mq-area-footer-left'),
@@ -173,13 +224,22 @@ $(function() {
     },
     
     initialize: function () {
-      var that = this;
+      var that = this,
+          hintHammer = new Hammer($('#mq-area-hint-data')[0]),
+          playHammer = new Hammer($('#mq-player')[0]); //ugly
       this.views = [];
       this.collection.on('reset', this.reset, this);
       
-      this.elNext.click(function (evt) { that.collection.next(); });
-      this.elHome.click(function (evt) { that.collection.home(); });
-      this.elPrev.click(function (evt) { that.collection.prev(); });
+      this.elNext.click(function (evt) { that.collection.next(true); });
+      this.elHome.click(function (evt) { that.collection.home(true); });
+      this.elPrev.click(function (evt) { that.collection.prev(true); });
+          
+      playHammer.ontap = function(evt) {
+        that.collection.current().play();
+      };
+      hintHammer.ontap = function(evt) {
+        that.collection.current().hint();
+      };
     },
     
     reset: function () {
