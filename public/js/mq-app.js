@@ -136,6 +136,9 @@ $(function() {
 
       this.idx = this.indexOf(quote);
       this.invoke('set', {current: false}, {silent: true});
+
+      this.current().trigger('hide');
+      this.current().trigger('stop');
       quote.set({current: true}, {silent: false});
 
       return this;
