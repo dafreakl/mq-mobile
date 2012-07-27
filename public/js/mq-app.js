@@ -61,6 +61,33 @@ $(function() {
       this.trigger('hint');
     },
     
+    evaluate: function (postedSolution, resView) {
+      var that = this,
+          evalUrl = this.urlRoot+'/'+this.get('number')+'/evaluate';      
+      
+
+      $.ajax({
+        type: 'POST',
+        url: evalUrl,
+        dataType: 'json',
+        data: {psolution: postedSolution},
+        success: function(data, textStatus, jqXHR){
+          var resData = data[0];
+          
+          that.setEvaluated();
+          
+          // implicit fetch of model: update local fields that might changed          
+          that.set({commits: resData.quote.commits, solutions: resData.quote.solutions},
+                   {silent: true});
+          
+          resView.evaluated(resData);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          alert('Error in evaluation, please try again later');
+        }
+      });
+    },
+    
     setEvaluated: function(){
       if(supports_local_storage()){
         localStorage.setItem(this.get("number"), 'true');
@@ -147,14 +174,30 @@ $(function() {
   //
   // -------------------------------------------------------------------------  
   QuoteView = Backbone.View.extend({
+    el: $('#mq-area-main'),
     
     initialize: function () {
+      var that = this;
       this.model.on('change:current', this.render, this);
       this.model.on('chosen', this.render, this);
       this.model.on('play', this.play, this);
       this.model.on('stop', this.stop, this);
       this.model.on('hint', this.hint, this);
       this.model.on('hide', this.hide, this);
+      this.model.on('evaluate', this.evaluate, this);
+    },
+    
+    evaluate: function () {
+      var req = $(this.el).find('.mq-input').val();
+      this.model.evaluate(req, this);
+    },
+    
+    evaluated: function (data) {
+      if (data.res) {
+        this.renderCorrect(data);
+      } else {
+        this.renderWrong(data);
+      }
     },
     
     play: function () {
@@ -198,17 +241,43 @@ $(function() {
       }
     },
     
-    render: function () {
+    renderGeneral: function () {
       QuoteView.elInfo.html('mquzz #' + this.model.get('number'));
       QuoteView.elDate.html('datum: ' + this.model.get('qdate')); //qdate
       QuoteView.elPerc.html('quote: 22 %');
-      QuoteView.elHint.html(this.model.get('hints'));
+      QuoteView.elHint.html(this.model.get('hints'));    
+    },
+    
+    renderCorrect: function (data) {
+      this.renderGeneral();
+      QuoteView.elRequest.hide();
+      QuoteView.elResult.show();
+      
+      // TODO: render correct
+      
+    },
+    
+    renderWrong: function (data) {
+      this.renderGeneral();
+      QuoteView.elRequest.hide();
+      QuoteView.elResult.show();
+      
+      // TODO: render wrong
+      
+    },
+    
+    render: function () {
+      this.renderGeneral();
+      QuoteView.elRequest.show();
+      QuoteView.elResult.hide();
     }
   }, {
     elInfo: $('#mq-area-header-info'),
     elDate: $('#mq-area-topper-date'),
     elPerc: $('#mq-area-topper-perc'),
     elHint: $('#mq-area-hint-data'),
+    elResult: $('#mq-area-result'),
+    elRequest: $('#mq-area-request'),
     player: mquzz($('#mq-player')) //access: QuoteView.player
   });
   //
@@ -243,6 +312,10 @@ $(function() {
       hintHammer.ontap = function(evt) {
         that.collection.current().hint();
       };
+      
+      $('#mq-area-input-btn .mq-button').click(function (evt) {
+        that.collection.current().trigger('evaluate');
+      });      
     },
     
     reset: function () {

@@ -4,23 +4,66 @@ require 'sinatra'
 require 'mongoid'
 require 'json'
 require './models/quote'
+require 'amatch'
+include Amatch
 
 Mongoid.load!("config/mongoid.yml")
 
-get '/api/v1/quote/:nr' do
-  "quote nr: #{params[:nr]}"
+post '/api/v1/quote/:nr/evaluate' do |nr|
+  result = []
+  
+  puts ">>>>>>>>>>>>>> EVALUATE!!!!!!!!!"
+  
+  posted_solution = params[:psolution]
+  solution = escape_html( posted_solution )  
+  solution = '-' if solution == ''
+  
+  quotes = Quote.where(number: nr.to_i).entries
+  return result.to_json if quotes.nil? || quotes.length <= 0
+  
+  quote = quotes.first
+
+  quote.inc(:commits, 1)
+  
+  if quote.titles.index{|title| title.similar?(solution) }.nil?
+    #wrong
+    result.push(Hash["res" => false, "posted" => solution, "quote" => quote])
+  else
+    # correct 
+    quote.inc(:solutions, 1) #quote.solutions += 1
+    result.push(Hash["res" => true, "posted" => solution, "quote" => quote])
+  end  
+  
+  result.to_json
 end
 
+get '/api/v1/quote/:nr' do |nr|
+  content_type :json
+  quote = Quote.where(number: nr)
+  quote.to_json(:except => [:titles])
+end
 
-get '/' do
-  @quotes = [
-              {:number => 1,  :qdate => '01/01/2012', :titles => ['title 1'], :audiourl => 'mquzz_021', :hints => 'short hint', :hintl => 'long hint'},
-              {:number => 2,  :qdate => '01/02/2012', :titles => ['title 2'], :audiourl => 'mquzz_022', :hints => 'short hint 2', :hintl => 'long hint 22222'}
-              ]
-  haml :index
-  
-  #content_type :json  
-  #all_quotes = Quote.all.first
-  #puts "<#{all_quotes.class}>"
-  #all_quotes.to_json  
+get '/*' do
+  @quotes = Quote.all().fields(["number", "qdate", "solutions", "commits", "audiourl", "addinfo", "hints", "hintl"]).asc(:number)
+  haml :index  
+end
+
+class String
+  def similar?(astr)
+    #normalize
+    ns = self.strip.downcase.delete " -,"
+    na = astr.strip.downcase.delete " -,"
+      
+    #define max distance
+    max_dist = case ns.length
+      when 0..4 then 0
+      when 5..9 then 2
+      when 10..14 then 4
+      when 15..19 then 6
+      else 8
+    end
+    
+    m = Levenshtein.new(ns)
+    m.match(na) <= max_dist
+  end  
 end

@@ -57,3 +57,4 @@ publish
 .idea
 
 start_server.bat
+install_*.rb

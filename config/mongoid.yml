@@ -1,6 +1,6 @@
 development:
   host: localhost
-  database: mq2
+  database: mqmobile
   
 #development:
 #  sessions:
