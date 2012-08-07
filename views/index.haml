@@ -102,3 +102,25 @@
     <% quotes.each(function(quote){ %>
     <li data-mq-number='<%= quote.get('number') %>'><%= quote.get('number') %></li>
     <% }); %>
+
+  %script{ :type => 'text/template', :id => 'mq-tmpl-correct' }
+    <h1>Glückwunsch, das ist richtig!</h1>
+    <div>Deine Antwort war <%= posted %></div>
+    <div>Mögliche Antworten waren
+    <% _.each(titles, function(title){ print(title + ', '); }); %>
+    </div>
+    <div>Bisher wurde dies <%= solutions %> mal gelöst, was bei insgesamt <%= commits %> Einsendungen einer Lösungsquote von <%= rate %>% entspricht.</div>
+    <a target='_blank' href='<%= info %>'>imdb</a>
+    <a target='_blank' href='<%= trailer %>'>trailer</a>
+    <a target='_blank' href='<%= buy %>'>amazon</a>
+
+  %script{ :type => 'text/template', :id => 'mq-tmpl-wrong' }
+    <h1>Die Antwort war leider falsch.</h1>
+    <div>Deine Antwort war <%= posted %></div>
+    <div>Mögliche Antworten waren
+    <% _.each(titles, function(title){ print(title + ', '); }); %>
+    </div>
+    <div>Bisher wurde dies <%= solutions %> mal gelöst, was bei insgesamt <%= commits %> Einsendungen einer Lösungsquote von <%= rate %>% entspricht.</div>
+    <a target='_blank' href='<%= info %>'>imdb</a>
+    <a target='_blank' href='<%= trailer %>'>trailer</a>
+    <a target='_blank' href='<%= buy %>'>amazon</a>

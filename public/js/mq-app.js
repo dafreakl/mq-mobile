@@ -176,6 +176,10 @@ $(function() {
   QuoteView = Backbone.View.extend({
     el: $('#mq-area-main'),
     
+    wrong: _.template($('#mq-tmpl-wrong').html()),
+    
+    correct: _.template($('#mq-tmpl-correct').html()),
+    
     initialize: function () {
       var that = this;
       this.model.on('change:current', this.render, this);
@@ -248,13 +252,26 @@ $(function() {
       QuoteView.elHint.html(this.model.get('hints'));    
     },
     
+    calcRate: function(data) {
+      return data.quote.commits === 0
+              ? 0
+              : (data.quote.solutions / data.quote.commits * 100).toFixed(2);
+    },
+    
     renderCorrect: function (data) {
       this.renderGeneral();
       QuoteView.elRequest.hide();
       QuoteView.elResult.show();
       
-      // TODO: render correct
-      
+      QuoteView.elResult.empty();
+      QuoteView.elResult.append( this.correct({ titles: data.quote.titles,
+                                                commits: data.quote.commits,
+                                                solutions: data.quote.solutions,
+                                                buy: data.quote.buy,
+                                                info: data.quote.info,
+                                                trailer: data.quote.trailer,
+                                                posted: data.posted,
+                                                rate: this.calcRate(data)}) );
     },
     
     renderWrong: function (data) {
@@ -262,8 +279,15 @@ $(function() {
       QuoteView.elRequest.hide();
       QuoteView.elResult.show();
       
-      // TODO: render wrong
-      
+      QuoteView.elResult.empty();
+      QuoteView.elResult.append( this.wrong({ titles: data.quote.titles,
+                                              commits: data.quote.commits,
+                                              solutions: data.quote.solutions,
+                                              buy: data.quote.buy,
+                                              info: data.quote.info,
+                                              trailer: data.quote.trailer,
+                                              posted: data.posted,
+                                              rate: this.calcRate(data)}) );
     },
     
     render: function () {
@@ -288,6 +312,7 @@ $(function() {
     elNext: $('#mq-area-footer-right'),
     elHome: $('#mq-area-footer-center'),
     elPrev: $('#mq-area-footer-left'),
+    elInput: $('#mq-area-input-field .mq-input'),
     
     template: _.template($('#mq-tmpl-quotes').html()),
     
@@ -298,13 +323,22 @@ $(function() {
     initialize: function () {
       var that = this,
           hintHammer = new Hammer($('#mq-area-hint-data')[0]),
-          playHammer = new Hammer($('#mq-player')[0]); //ugly
+          playHammer = new Hammer($('#mq-player')[0]); 
       this.views = [];
       this.collection.on('reset', this.reset, this);
       
-      this.elNext.click(function (evt) { that.collection.next(true); });
-      this.elHome.click(function (evt) { that.collection.home(true); });
-      this.elPrev.click(function (evt) { that.collection.prev(true); });
+      this.elNext.click(function (evt) {
+        that.elInput.val('');
+        that.collection.next(true);
+      });
+      this.elHome.click(function (evt) {
+        that.elInput.val('');
+        that.collection.home(true);
+      });
+      this.elPrev.click(function (evt) {
+        that.elInput.val('');
+        that.collection.prev(true);
+      });
           
       playHammer.ontap = function(evt) {
         that.collection.current().play();
@@ -313,9 +347,20 @@ $(function() {
         that.collection.current().hint();
       };
       
-      $('#mq-area-input-btn .mq-button').click(function (evt) {
+      //ugly -> create own view
+      this.elInput.keypress(function (evt) {
+        if(evt.which !== 13) {
+          return;
+        }
+        evt.preventDefault();
+        that.collection.current().trigger('stop');
         that.collection.current().trigger('evaluate');
-      });      
+      });
+      
+      $('#mq-area-input-btn .mq-button').click(function (evt) {
+        that.collection.current().trigger('stop');
+        that.collection.current().trigger('evaluate');
+      });
     },
     
     reset: function () {
@@ -327,6 +372,7 @@ $(function() {
     onClick: function (evt) {
       var ct = $(evt.currentTarget),
           id = ct.attr('data-mq-number');
+      this.elInput.val('');
       this.collection.select(id);
     },
     
