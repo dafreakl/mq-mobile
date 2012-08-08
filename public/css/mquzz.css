@@ -182,12 +182,58 @@ a.mq-button:hover{
 
 
 
+.mq-area-result-top{
+    display: table;
+    width: 100%;
+    margin-top: 5px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+.mq-area-result-img{
+    display: table-cell;
+    text-align: right;
+}
+.mq-area-result-txt{
+    display: table-cell;
+    text-align: left;
+    padding-left: 10px;
+}
+.mq-area-result-main{
+    margin: 10px 10px 10px 10px;
+}
+
+.mq-area-result-link {
+    text-align: center;
+    margin-top: 15px;
+}
+.mq-area-result-link span{
+    padding: 5px 5px;
+    background-color: #29a0cb;
+    text-decoration: none;
+    color: white;
+}
 
 
-
-
-
-
+.mq-big{
+    font-family: RobotoThin;
+    font-size: 2.5em;
+}
+.mq-light{
+    font-family: RobotoLight;
+    font-size: 0.9em;    
+}
+.mq-thin{
+    font-family: RobotoThin;
+    font-size: 0.9em;    
+}
+.mq-normal{
+    font-family: RobotoRegular;
+    font-size: 1.0em;
+}
+.mq-highlight{
+    font-family: RobotoRegular;
+    font-size: 1.1em;    
+}
 /*--------------------------------------------------------------------------*/
 /* SMARTPHONES - PORTRAIT & LANDSCAPE */
 @media

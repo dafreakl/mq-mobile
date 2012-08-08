@@ -104,23 +104,63 @@
     <% }); %>
 
   %script{ :type => 'text/template', :id => 'mq-tmpl-correct' }
-    <h1>Glückwunsch, das ist richtig!</h1>
-    <div>Deine Antwort war <%= posted %></div>
-    <div>Mögliche Antworten waren
-    <% _.each(titles, function(title){ print(title + ', '); }); %>
-    </div>
-    <div>Bisher wurde dies <%= solutions %> mal gelöst, was bei insgesamt <%= commits %> Einsendungen einer Lösungsquote von <%= rate %>% entspricht.</div>
-    <a target='_blank' href='<%= info %>'>imdb</a>
-    <a target='_blank' href='<%= trailer %>'>trailer</a>
-    <a target='_blank' href='<%= buy %>'>amazon</a>
+    %div.mq-area-result-top
+      %div.mq-area-result-img
+        %img{:src => 'img/correct.png', :alt => 'Korrete Antwort'} 
+      %div.mq-area-result-txt.mq-normal
+        Glückwunsch, das ist <span class='mq-big'>richtig!<span>
+    %div.mq-area-result-main.mq-light
+      %div
+        Deine Antwort war
+        %span.mq-highlight
+          <%= posted %>.
+        Mögliche Antworten waren
+        %span.mq-highlight
+          <% _.each(titles, function(title){ print(title + ', '); }); %>.
+        Bisher wurde dies
+        %span.mq-highlight
+          <%= solutions %>
+        mal gelöst, was bei insgesamt
+        %span.mq-highlight
+          <%= commits %>
+        Einsendungen einer Lösungsquote von
+        %span.mq-highlight
+          <%= rate %>%
+        entspricht.
+      %div.mq-area-result-link
+        <a target='_blank' href='<%= info %>'><span>info</span></a>
+      %div.mq-area-result-link
+        <a target='_blank' href='<%= trailer %>'><span>trailer</span></a>
+      %div.mq-area-result-link
+        <a target='_blank' href='<%= buy %>'><span>amazon</span></a>
 
   %script{ :type => 'text/template', :id => 'mq-tmpl-wrong' }
-    <h1>Die Antwort war leider falsch.</h1>
-    <div>Deine Antwort war <%= posted %></div>
-    <div>Mögliche Antworten waren
-    <% _.each(titles, function(title){ print(title + ', '); }); %>
-    </div>
-    <div>Bisher wurde dies <%= solutions %> mal gelöst, was bei insgesamt <%= commits %> Einsendungen einer Lösungsquote von <%= rate %>% entspricht.</div>
-    <a target='_blank' href='<%= info %>'>imdb</a>
-    <a target='_blank' href='<%= trailer %>'>trailer</a>
-    <a target='_blank' href='<%= buy %>'>amazon</a>
+    %div.mq-area-result-top
+      %div.mq-area-result-img
+        %img{:src => 'img/wrong.png', :alt => 'Falsche Antwort'} 
+      %div.mq-area-result-txt.mq-normal
+        Die Antwort war <span class='mq-big'>falsch.<span>
+    %div.mq-area-result-main.mq-light
+      %div
+        Deine Antwort war
+        %span.mq-highlight
+          <%= posted %>.
+        Mögliche Antworten waren
+        %span.mq-highlight
+          <% _.each(titles, function(title){ print(title + ', '); }); %>.
+        Bisher wurde dies
+        %span.mq-highlight
+          <%= solutions %>
+        mal gelöst, was bei insgesamt
+        %span.mq-highlight
+          <%= commits %>
+        Einsendungen einer Lösungsquote von
+        %span.mq-highlight
+          <%= rate %>%
+        entspricht.
+      %div.mq-area-result-link
+        <a target='_blank' href='<%= info %>'><span>info</span></a>
+      %div.mq-area-result-link
+        <a target='_blank' href='<%= trailer %>'><span>trailer</span></a>
+      %div.mq-area-result-link
+        <a target='_blank' href='<%= buy %>'><span>amazon</span></a>
