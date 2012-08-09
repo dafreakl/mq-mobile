@@ -35,6 +35,31 @@ $(function() {
   //----------------------------------------------------------------------------
   //----------------------------------------------------------------------------
   //----------------------------------------------------------------------------
+  _.mixin({
+    sentence: function (arr, sep, connector) {
+      var result = '';
+      
+      sep = sep || ', ';
+      connector = connector || ' und ';
+
+      switch (arr.length) {
+        case 0:
+          result = '';
+          break;
+        case 1:
+          result = _.first(arr);
+          break;
+        case 2:
+          result = _.first(arr) + connector + _.last(arr);
+          break;
+        default:
+          result = arr.slice(0, -1).join(sep) + connector + _.last(arr);
+          break;
+      }
+      return result;
+    }
+  });
+  
   function supports_local_storage() {
     try {
       return 'localStorage' in window && window['localStorage'] !== null;

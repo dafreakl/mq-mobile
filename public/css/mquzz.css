@@ -19,6 +19,12 @@ header{
 footer{
     border-top: 4px solid #29a0cb;
 }
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: none;
+}
 /*--------------------------------------------------------------------------*/
 .mq-column{
     float: left;
@@ -184,7 +190,6 @@ a.mq-button:hover{
 
 .mq-area-result-top{
     display: table;
-    width: 100%;
     margin-top: 5px;
     margin-left: 15px;
     margin-right: 15px;
@@ -198,19 +203,26 @@ a.mq-button:hover{
     text-align: left;
     padding-left: 10px;
 }
+
+
 .mq-area-result-main{
     margin: 10px 10px 10px 10px;
 }
-
-.mq-area-result-link {
+.mq-area-result-links {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 5px;
+    margin-bottom: 15px;
 }
-.mq-area-result-link span{
+.mq-area-result-link {
+    margin-top: 15px;
+    margin-left: 25px;
+    margin-right: 25px;
+    display: inline-block;
+}
+.mq-area-result-btn {
     padding: 5px 5px;
     background-color: #29a0cb;
-    text-decoration: none;
-    color: white;
+    width: 100px;
 }
 
 

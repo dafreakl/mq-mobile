@@ -127,12 +127,13 @@
         %span.mq-highlight
           <%= rate %>%
         entspricht.
-      %div.mq-area-result-link
-        <a target='_blank' href='<%= info %>'><span>info</span></a>
-      %div.mq-area-result-link
-        <a target='_blank' href='<%= trailer %>'><span>trailer</span></a>
-      %div.mq-area-result-link
-        <a target='_blank' href='<%= buy %>'><span>amazon</span></a>
+      %div.mq-area-result-links
+        %div.mq-area-result-link
+          <a target='_blank' href='<%= info %>'><div class='mq-area-result-btn'>info</div></a>
+        %div.mq-area-result-link
+          <a target='_blank' href='<%= trailer %>'><div class='mq-area-result-btn'>trailer</div></a>
+        %div.mq-area-result-link
+          <a target='_blank' href='<%= buy %>'><div class='mq-area-result-btn'>amazon</div></a>
 
   %script{ :type => 'text/template', :id => 'mq-tmpl-wrong' }
     %div.mq-area-result-top
@@ -147,7 +148,7 @@
           <%= posted %>.
         Mögliche Antworten waren
         %span.mq-highlight
-          <% _.each(titles, function(title){ print(title + ', '); }); %>.
+          <% print(_.sentence(titles)); %>.
         Bisher wurde dies
         %span.mq-highlight
           <%= solutions %>
@@ -158,9 +159,10 @@
         %span.mq-highlight
           <%= rate %>%
         entspricht.
-      %div.mq-area-result-link
-        <a target='_blank' href='<%= info %>'><span>info</span></a>
-      %div.mq-area-result-link
-        <a target='_blank' href='<%= trailer %>'><span>trailer</span></a>
-      %div.mq-area-result-link
-        <a target='_blank' href='<%= buy %>'><span>amazon</span></a>
+      %div.mq-area-result-links
+        %div.mq-area-result-link
+          <a target='_blank' href='<%= info %>'><div class='mq-area-result-btn'>info</div></a>
+        %div.mq-area-result-link
+          <a target='_blank' href='<%= trailer %>'><div class='mq-area-result-btn'>trailer</div></a>
+        %div.mq-area-result-link
+          <a target='_blank' href='<%= buy %>'><div class='mq-area-result-btn'>amazon</div></a>
