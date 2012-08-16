@@ -4,9 +4,12 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+ol, li {
+    list-style: none;
+}
 body{
     font-family: RobotoLight;
-    font-size: 1em;    
+    font-size: 1em;
     background-color: #0e1013;
     color: white;
 }
@@ -46,12 +49,6 @@ a:hover{
     font-family: RobotoThin;
     font-size: 1.0em;
     padding: 7px 9px;
-    /*
-    background-color: #29a0cb;
-    -webkit-border-radius: 1px;
-    -moz-border-radius: 1px;
-    border-radius: 1px;
-    */
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     border-radius: 30px;
@@ -87,7 +84,6 @@ a.mq-button:hover{
 }
 /*--------------------------------------------------------------------------*/
 #mq-area-overview{
-    background-color: blue;
     display: none;
     visibility: hidden;
 }
@@ -110,10 +106,15 @@ a.mq-button:hover{
 #mq-area-header-info{
     display: table-cell;
 }
+#mq-area-header-nr{
+    color: #fe57a1;
+}
+
 #mq-area-header-help{
     display: table-cell;
     text-align: center;
     width: 30px;
+    cursor: pointer;
 }
 #mq-area-header-help div{
     -webkit-border-radius: 25px;
@@ -124,7 +125,7 @@ a.mq-button:hover{
 
 #mq-area-topper{
     border-bottom: 1px solid #29a0cb;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     width: 100%;
 }
 #mq-area-topper-cont{
@@ -190,7 +191,7 @@ a.mq-button:hover{
 
 .mq-area-result-top{
     display: table;
-    margin-top: 5px;
+    margin-top: 0px;
     margin-left: 15px;
     margin-right: 15px;
 }
@@ -212,6 +213,7 @@ a.mq-button:hover{
     text-align: center;
     margin-top: 5px;
     margin-bottom: 15px;
+    width: 100%;
 }
 .mq-area-result-link {
     margin-top: 15px;
@@ -224,8 +226,6 @@ a.mq-button:hover{
     background-color: #29a0cb;
     width: 100px;
 }
-
-
 .mq-big{
     font-family: RobotoThin;
     font-size: 2.5em;
@@ -244,8 +244,38 @@ a.mq-button:hover{
 }
 .mq-highlight{
     font-family: RobotoRegular;
-    font-size: 1.1em;    
+    font-size: 1.1em;
 }
+
+
+/*--------------------------------------------------------------------------*/
+/* HELP VIEW */
+#mq-area-help-popup{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  background: rgba(0, 0, 0, 0.7);
+}
+#mq-area-help-content{
+  position: fixed;
+  width: 240px;
+  height: 340px;
+  margin: -170px 0 0 -120px;
+  left: 50%;
+  top: 50%;
+  z-index: 99;
+  border: 10px solid #0a0a0b;
+  overflow: hidden;
+  overflow-y: scroll;
+  background-color: #13161a;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
+}
+
 /*--------------------------------------------------------------------------*/
 /* SMARTPHONES - PORTRAIT & LANDSCAPE */
 @media
@@ -282,6 +312,24 @@ only screen and (min-width: 1024px) {
         visibility: visible;
         width: 40%;
     }
+    
+    #mq-area-overview li {
+	float: left;	
+    }
+    .mq-list-item{
+	display: block;
+	cursor: pointer;
+	background-color: #29a0cb;
+	/*padding: 15px 25px 15px 25px;*/
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-right: 15px;
+	margin-bottom: 15px;
+	text-align: center;
+	font-family: RobotoThin;
+	font-size: 2.2em;
+	width: 75px;
+    }
     #mq-area-main{
         width: 60%;
     }
@@ -290,6 +338,14 @@ only screen and (min-width: 1024px) {
     #mq-area-footer-left{
         display: none;
         visibility: hidden;    
+    }
+    #mq-area-topper{
+        margin-bottom: 15px;
+    }
+    #mq-area-help-content{
+      width: 600px;
+      height: 600px;
+      margin: -300px 0 0 -300px;
     }    
 }
 /*--------------------------------------------------------------------------*/

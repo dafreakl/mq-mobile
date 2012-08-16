@@ -172,6 +172,14 @@ $(function () {
             if (loadcnt === 6) {loadcnt = 0;}
         };
         
+        var drawNumber = function () {
+            ctx.save();
+            ctx.font = 'normal 120px sans-serif';
+            ctx.fillStyle = 'rgba(0,0,0,0.2)';
+            ctx.fillText('13', cw/2-70, ch/2+40);
+            ctx.restore();
+        };
+        
         var update = function () {
             drawClear();
             drawCircleBg();

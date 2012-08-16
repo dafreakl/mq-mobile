@@ -1,37 +1,4 @@
 $(function() {
-/*
-  var rand = -1,
-      mp = mquzz($('#mq-player')),
-      hintEl = $('#mq-area-hint-data'),
-      haHint = new Hammer(hintEl[0]),
-      haPlayer = new Hammer($('#mq-player')[0]);
-      
-  haPlayer.ontap = function(ev) {
-    var mp3s = ['mquzz_021', 'mquzz_022', 'mquzz_023', 'mquzz_025', 'mquzz_026'],
-        url = 'http://mquzz-audio.s3.amazonaws.com/';
-    rand = rand + 1;
-    
-    if (mp.isPlaying()) {
-      mp.stop();
-    } else {
-      //mp.load(url+mp3s[rand]);
-      mp.play(url+mp3s[rand]);
-      //mp.play('http://mquzz-audio.s3.amazonaws.com/bigfile');
-      //mp.play('http://mquzz-audio.s3.amazonaws.com/mquzz_025');
-    }
-    if (rand === 4){ rand = -1; }        
-    //21...26
-  };
-
-  haHint.ontap = function(ev) {
-    if (hintEl.width() === 0){
-      $( "#mq-area-hint-v>div" ).animate({ width: '100%' }, 1000);
-    } else {
-      $( "#mq-area-hint-v>div" ).animate({ width: '0px' }, 1000);
-    }
-  };
-  */
-  
   //----------------------------------------------------------------------------
   //----------------------------------------------------------------------------
   //----------------------------------------------------------------------------
@@ -57,16 +24,21 @@ $(function() {
           break;
       }
       return result;
+    },
+    formatDate: function (dat) {
+        var dates = dat.split("-");
+        return dates[2] + "." + dates[1] + "." + dates[0];
+    },   
+    supports_local_storage: function  () {
+      try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+      } catch(e){
+        return false;
+      }
     }
   });
   
-  function supports_local_storage() {
-    try {
-      return 'localStorage' in window && window['localStorage'] !== null;
-    } catch(e){
-      return false;
-    }
-  }
+
   //
   // -------------------------------------------------------------------------
   Quote = Backbone.Model.extend({
@@ -114,14 +86,14 @@ $(function() {
     },
     
     setEvaluated: function(){
-      if(supports_local_storage()){
+      if(_.supports_local_storage()){
         localStorage.setItem(this.get("number"), 'true');
         this.trigger('evaluated');
       }
     },
 
     wasEvaluated: function(){
-      return supports_local_storage()
+      return _.supports_local_storage()
         ? localStorage.getItem(this.get("number")) === 'true'
         : false;
     }
@@ -271,8 +243,8 @@ $(function() {
     },
     
     renderGeneral: function () {
-      QuoteView.elInfo.html('mquzz #' + this.model.get('number'));
-      QuoteView.elDate.html('datum: ' + this.model.get('qdate')); //qdate
+      QuoteView.elInfo.html('#' + this.model.get('number'));
+      QuoteView.elDate.html('datum: ' + _.formatDate(this.model.get('qdate')));
       QuoteView.elPerc.html('quote: 22 %');
       QuoteView.elHint.html(this.model.get('hints'));    
     },
@@ -321,7 +293,7 @@ $(function() {
       QuoteView.elResult.hide();
     }
   }, {
-    elInfo: $('#mq-area-header-info'),
+    elInfo: $('#mq-area-header-nr'),
     elDate: $('#mq-area-topper-date'),
     elPerc: $('#mq-area-topper-perc'),
     elHint: $('#mq-area-hint-data'),
@@ -348,28 +320,36 @@ $(function() {
     initialize: function () {
       var that = this,
           hintHammer = new Hammer($('#mq-area-hint-data')[0]),
-          playHammer = new Hammer($('#mq-player')[0]); 
+          playHammer = new Hammer($('#mq-player')[0]),
+          inptHammer = new Hammer($('#mq-area-input-btn .mq-button')[0]),
+          nextHammer = new Hammer(this.elNext[0]),
+          homeHammer = new Hammer(this.elHome[0]),
+          prevHammer = new Hammer(this.elPrev[0]);
+
       this.views = [];
       this.collection.on('reset', this.reset, this);
-      
-      this.elNext.click(function (evt) {
+
+      nextHammer.ontap = function(evt) {
         that.elInput.val('');
         that.collection.next(true);
-      });
-      this.elHome.click(function (evt) {
+      };
+      homeHammer.ontap = function(evt) {
         that.elInput.val('');
         that.collection.home(true);
-      });
-      this.elPrev.click(function (evt) {
+      };
+      prevHammer.ontap = function(evt) {
         that.elInput.val('');
         that.collection.prev(true);
-      });
-          
+      };
       playHammer.ontap = function(evt) {
         that.collection.current().play();
       };
       hintHammer.ontap = function(evt) {
         that.collection.current().hint();
+      };
+      inptHammer.ontap = function(evt){
+        that.collection.current().trigger('stop');
+        that.collection.current().trigger('evaluate');
       };
       
       //ugly -> create own view
@@ -378,11 +358,6 @@ $(function() {
           return;
         }
         evt.preventDefault();
-        that.collection.current().trigger('stop');
-        that.collection.current().trigger('evaluate');
-      });
-      
-      $('#mq-area-input-btn .mq-button').click(function (evt) {
         that.collection.current().trigger('stop');
         that.collection.current().trigger('evaluate');
       });
@@ -406,5 +381,24 @@ $(function() {
       $(this.el).append( this.template({quotes: this.collection}) );
     }
   });
-  
+  //
+  // -------------------------------------------------------------------------    
+  HelpView = Backbone.View.extend({
+    el: $('#mq-area-help'),
+    
+    initialize: function () {
+      var that = this,
+          area = new Hammer(this.$el[0]),
+          openBtn = new Hammer(HelpView.buttonEl[0]);
+      this.$el.hide();
+      area.ontap = function(evt) { that.$el.hide(); };      
+      openBtn.ontap = function(evt) { that.$el.show(); };
+    },
+    
+    render: function () {
+      this.$el.show();
+    }
+  }, {
+    buttonEl: $('#mq-area-header-help')
+  });  
 });

@@ -29,9 +29,11 @@
 %body
   %div#mq-container.clearfix
     %header#mq-area-header
-      %div#mq-area-header-info mquzz #24
+      %div#mq-area-header-info
+        %span mquzz
+        %span#mq-area-header-nr #24
       %div#mq-area-header-help
-        %div ?
+        %div i
   
   
     %div#mq-area-topper.mq-column
@@ -41,7 +43,18 @@
     
     %div#mq-area-overview.mq-column
       %ol
-
+        %li
+          %div.mq-list-item 1
+          %div.mq-list-item 2
+          %div.mq-list-item 3
+          %div.mq-list-item 4
+          %div.mq-list-item 5          
+          %div.mq-list-item 6
+          %div.mq-list-item 7
+          %div.mq-list-item 8
+          %div.mq-list-item 9
+          %div.mq-list-item 10
+      
     %div#mq-area-main.mq-column
       %div#mq-area-request
         %div#mq-area-player
@@ -58,7 +71,7 @@
           %div#mq-area-hint-data hauptdarsteller ist Jack Nichelson
       
       %div#mq-area-result
-        du hattest recht <br />du hattest recht <br />du hattest recht <br />du hattest recht <br />
+        du hattest recht
       
       %footer
         %div#mq-area-footer
@@ -70,7 +83,37 @@
             
           %div#mq-area-footer-right.mq-footer-col
             %span.mq-btn-nav >>  
-  
+    
+    %div#mq-area-help.mq-column
+      %div#mq-area-help-popup
+        %div#mq-area-help-content
+          %h4 Impressum
+          %img{ :src => 'img/impressum.png' }
+          %h4 Regeln
+          %h6
+            Wie funktioniert das hier?
+          %p.mq-light
+            1.) Lautstärke hochdrehen
+            %br
+            2.) Filmzitat auswählen
+            %br
+            3.) Titel raten und abschicken
+            %br
+          %h6
+            Welcher Titelname kann eingegeben werden und wird als richtig gewertet?
+          %p.mq-light
+            Der korrekte Titel ist der Web-Seite
+            %a{ :href => 'http://imdb.com', :target => '_blank' }
+              %code
+                http://imdb.com
+            entnommen. Da es sich hier jedoch um ein Quiz in deutscher Sprache handelt, sind die laut imdb angegebenen, deutschen Titel korrekt.
+            Zusätzlich ist auch noch der englische Titel gültig. Beispiel: Es wird bei einem entsprechenden Zitat entweder der deutsche Filmtitel
+            %em Stirb Langsam
+            oder der englische Originaltitel
+            %em Die Hard
+            als korrekt gewertet. Groß- und Kleinschreibung wird dabei nicht unterschieden und bis zu einem gewissen Grad werden auch Tippfehler toleriert.
+
+
   %script(src="/js/libs/jquery-1.7.2.min.js")
   %script(src="/js/libs/hammer.js")
   %script(src="/js/libs/underscore-min.js")
@@ -87,12 +130,14 @@
 
   :javascript
     $(function(){
-      quotes = new QuoteList;      
-      var qq = new QuoteListView({collection: quotes});
+      quotes = new QuoteList;
+      var help = new HelpView,
+          qq = new QuoteListView({collection: quotes});
       
-      //var qv = new QuoteView({model: window.quotes.at(0)});
-      //qv.play();
-      
+      if (!buzz.isSupported()){
+        $('#mq-container').html('Dein Browser untersützt diese Seite nicht.');
+        return;
+      }      
       window.quotes.reset(#{@quotes.to_json()});
       window.quotes.home();
       qq.render();
@@ -100,8 +145,11 @@
     
   %script{ :type => 'text/template', :id => 'mq-tmpl-quotes' }
     <% quotes.each(function(quote){ %>
-    <li data-mq-number='<%= quote.get('number') %>'><%= quote.get('number') %></li>
+    <li data-mq-number='<%= quote.get('number') %>'><div class='mq-box mq-list-item'><%= quote.get('number') %></div></li>
     <% }); %>
+    <% var ii = 5; _.times(20, function() { ii++; %>
+    <li data-mq-number='<%= ii %>'><div class='mq-box mq-list-item'><%= ii %></div></li>
+    <% } ) %>
 
   %script{ :type => 'text/template', :id => 'mq-tmpl-correct' }
     %div.mq-area-result-top
