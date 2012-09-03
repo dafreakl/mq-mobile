@@ -1,11 +1,17 @@
 $(function() {
   // TODO:
   // - include iscroll for impresum/rule and test on phone
-  // - check html5boilerplate mobile
-  // - zepto instead of jquery and hammer.js
   //----------------------------------------------------------------------------
   //----------------------------------------------------------------------------
   //----------------------------------------------------------------------------
+  // zepto fallback for click handler instead of tap
+  // see https://github.com/madrobby/zepto/issues/409 
+  if (!('ontouchend' in window)) {
+      $(document).delegate('body', 'click', function(e) {
+          $(e.target).trigger('tap');
+      });
+  }
+    
   _.mixin({
     sentence: function (arr, sep, connector) {
       var result = '';
@@ -203,7 +209,6 @@ $(function() {
       } else {
         this.renderWrong(data);
       }
-      // TODO: update render of LIST for color change!
     },
     
     play: function () {
@@ -240,7 +245,7 @@ $(function() {
     },
     
     hint: function () {
-      if (QuoteView.elHint.width() === 0){
+      if (QuoteView.elHint.width() <= 30){
         this.show(1000);
       } else {
         this.hide(1000);
@@ -263,8 +268,6 @@ $(function() {
         QuoteView.elHint.html(this.model.get('hints'));
       }  
     },
-    
-    
     
     renderCorrect: function (data) {
       this.renderGeneral();
@@ -329,41 +332,35 @@ $(function() {
     },
     
     initialize: function () {
-      var that = this,
-          hintHammer = new Hammer($('#mq-area-hint-data')[0]),
-          playHammer = new Hammer($('#mq-player')[0]),
-          inptHammer = new Hammer($('#mq-area-input-btn .mq-button')[0]),
-          nextHammer = new Hammer(this.elNext[0]),
-          homeHammer = new Hammer(this.elHome[0]),
-          prevHammer = new Hammer(this.elPrev[0]);
-
+      var that = this;
+      
       this.views = [];
       this.collection.on('reset', this.reset, this);
       this.collection.on('evaluated', this.render, this);
-
-      nextHammer.ontap = function(evt) {
+      
+      this.elNext.tap(function(){
         that.elInput.val('');
         that.collection.next(true);
-      };
-      homeHammer.ontap = function(evt) {
+      });
+      this.elHome.tap(function(){
         that.elInput.val('');
         that.collection.home(true);
-      };
-      prevHammer.ontap = function(evt) {
+      });
+      this.elPrev.tap(function(){
         that.elInput.val('');
         that.collection.prev(true);
-      };
-      playHammer.ontap = function(evt) {
+      });
+      $('#mq-player').tap(function(){
         that.collection.current().play();
-      };
-      hintHammer.ontap = function(evt) {
+      });
+      $('#mq-area-hint-data').tap(function(){
         that.collection.current().hint();
-      };
-      inptHammer.ontap = function(evt){
+      });
+      $('#mq-area-input-btn .mq-button').tap(function(){
         that.collection.current().trigger('stop');
         that.collection.current().trigger('evaluate');
-      };
-      
+      });
+       
       //ugly -> create own view
       this.elInput.keypress(function (evt) {
         if(evt.which !== 13) {
@@ -403,12 +400,10 @@ $(function() {
     el: $('#mq-area-help'),
     
     initialize: function () {
-      var that = this,
-          area = new Hammer(this.$el[0]),
-          openBtn = new Hammer(HelpView.buttonEl[0]);
+      var that = this;
       this.$el.hide();
-      area.ontap = function(evt) { that.$el.hide(); };      
-      openBtn.ontap = function(evt) { that.$el.show(); };
+      this.$el.tap(function(){ that.$el.hide(); });
+      HelpView.buttonEl.tap(function(){ that.$el.show(); });
     },
     
     render: function () {
