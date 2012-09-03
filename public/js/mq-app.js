@@ -1,4 +1,8 @@
 $(function() {
+  // TODO:
+  // - include iscroll for impresum/rule and test on phone
+  // - check html5boilerplate mobile
+  // - zepto instead of jquery and hammer.js
   //----------------------------------------------------------------------------
   //----------------------------------------------------------------------------
   //----------------------------------------------------------------------------
@@ -167,7 +171,7 @@ $(function() {
 
       return this;
     }
-  });  
+  });
   //
   // -------------------------------------------------------------------------  
   QuoteView = Backbone.View.extend({
@@ -199,6 +203,7 @@ $(function() {
       } else {
         this.renderWrong(data);
       }
+      // TODO: update render of LIST for color change!
     },
     
     play: function () {
@@ -242,18 +247,24 @@ $(function() {
       }
     },
     
+    calcRate: function(solutions, commits) {
+      return commits === 0
+              ? 0
+              : (solutions / commits * 100).toFixed(2);
+    },
+    
     renderGeneral: function () {
       QuoteView.elInfo.html('#' + this.model.get('number'));
       QuoteView.elDate.html('datum: ' + _.formatDate(this.model.get('qdate')));
-      QuoteView.elPerc.html('quote: 22 %');
-      QuoteView.elHint.html(this.model.get('hints'));    
+      QuoteView.elPerc.html('quote: '+ this.calcRate(this.model.get('solutions'), this.model.get('commits')) +' %');
+      if ($(document).width() > 500) {
+        QuoteView.elHint.html(this.model.get('hintl'));
+      } else {
+        QuoteView.elHint.html(this.model.get('hints'));
+      }  
     },
     
-    calcRate: function(data) {
-      return data.quote.commits === 0
-              ? 0
-              : (data.quote.solutions / data.quote.commits * 100).toFixed(2);
-    },
+    
     
     renderCorrect: function (data) {
       this.renderGeneral();
@@ -268,7 +279,7 @@ $(function() {
                                                 info: data.quote.info,
                                                 trailer: data.quote.trailer,
                                                 posted: data.posted,
-                                                rate: this.calcRate(data)}) );
+                                                rate: this.calcRate(data.quote.solutions, data.quote.commits)}) );
     },
     
     renderWrong: function (data) {
@@ -284,7 +295,7 @@ $(function() {
                                               info: data.quote.info,
                                               trailer: data.quote.trailer,
                                               posted: data.posted,
-                                              rate: this.calcRate(data)}) );
+                                              rate: this.calcRate(data.quote.solutions, data.quote.commits)}) );
     },
     
     render: function () {
@@ -328,6 +339,7 @@ $(function() {
 
       this.views = [];
       this.collection.on('reset', this.reset, this);
+      this.collection.on('evaluated', this.render, this);
 
       nextHammer.ontap = function(evt) {
         that.elInput.val('');
@@ -361,6 +373,10 @@ $(function() {
         that.collection.current().trigger('stop');
         that.collection.current().trigger('evaluate');
       });
+      // handle window resize to change used hint length
+      $(window).resize(function() {
+        that.collection.select(that.collection.current().get('number'));
+      });      
     },
     
     reset: function () {

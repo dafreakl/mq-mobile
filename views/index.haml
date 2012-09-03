@@ -145,11 +145,13 @@
     
   %script{ :type => 'text/template', :id => 'mq-tmpl-quotes' }
     <% quotes.each(function(quote){ %>
+    <% if (quote.wasEvaluated()) { %>
+    <li data-mq-number='<%= quote.get('number') %>'><div class='mq-box mq-list-item mq-box-evaluated'><%= quote.get('number') %></div></li>
+    <% } else { %>
     <li data-mq-number='<%= quote.get('number') %>'><div class='mq-box mq-list-item'><%= quote.get('number') %></div></li>
+    <% } %>
     <% }); %>
-    <% var ii = 5; _.times(20, function() { ii++; %>
-    <li data-mq-number='<%= ii %>'><div class='mq-box mq-list-item'><%= ii %></div></li>
-    <% } ) %>
+
 
   %script{ :type => 'text/template', :id => 'mq-tmpl-correct' }
     %div.mq-area-result-top
