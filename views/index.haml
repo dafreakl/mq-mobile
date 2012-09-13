@@ -79,7 +79,7 @@
             %span.mq-btn-nav <<
           
           %div#mq-area-footer-center.mq-footer-col
-            %span.mq-btn-nav home
+            %span.mq-btn-nav zufall
             
           %div#mq-area-footer-right.mq-footer-col
             %span.mq-btn-nav >>  
@@ -87,37 +87,39 @@
     %div#mq-area-help.mq-column
       %div#mq-area-help-popup
         %div#mq-area-help-content
-          %h4 Impressum
-          %img{ :src => 'img/impressum.png' }
-          %h4 Regeln
-          %h6
-            Wie funktioniert das hier?
-          %p.mq-light
-            1.) Lautstärke hochdrehen
-            %br
-            2.) Filmzitat auswählen
-            %br
-            3.) Titel raten und abschicken
-            %br
-          %h6
-            Welcher Titelname kann eingegeben werden und wird als richtig gewertet?
-          %p.mq-light
-            Der korrekte Titel ist der Web-Seite
-            %a{ :href => 'http://imdb.com', :target => '_blank' }
-              %code
-                http://imdb.com
-            entnommen. Da es sich hier jedoch um ein Quiz in deutscher Sprache handelt, sind die laut imdb angegebenen, deutschen Titel korrekt.
-            Zusätzlich ist auch noch der englische Titel gültig. Beispiel: Es wird bei einem entsprechenden Zitat entweder der deutsche Filmtitel
-            %em Stirb Langsam
-            oder der englische Originaltitel
-            %em Die Hard
-            als korrekt gewertet. Groß- und Kleinschreibung wird dabei nicht unterschieden und bis zu einem gewissen Grad werden auch Tippfehler toleriert.
+          %div#mq-area-help-www
+            %h4 Impressum
+            %img{ :src => 'img/impressum.png' }
+            %h4 Regeln
+            %h6
+              Wie funktioniert das hier?
+            %p.mq-light
+              1.) Lautstärke hochdrehen
+              %br
+              2.) Filmzitat auswählen
+              %br
+              3.) Titel raten und abschicken
+              %br
+            %h6
+              Welcher Titelname kann eingegeben werden und wird als richtig gewertet?
+            %p.mq-light
+              Der korrekte Titel ist der Web-Seite
+              %a{ :href => 'http://imdb.com', :target => '_blank' }
+                %code
+                  http://imdb.com
+              entnommen. Da es sich hier jedoch um ein Quiz in deutscher Sprache handelt, sind die laut imdb angegebenen, deutschen Titel korrekt.
+              Zusätzlich ist auch noch der englische Titel gültig. Beispiel: Es wird bei einem entsprechenden Zitat entweder der deutsche Filmtitel
+              %em Stirb Langsam
+              oder der englische Originaltitel
+              %em Die Hard
+              als korrekt gewertet. Groß- und Kleinschreibung wird dabei nicht unterschieden und bis zu einem gewissen Grad werden auch Tippfehler toleriert.
 
 
   %script(src="/js/libs/zepto.min.js")
   %script(src="/js/libs/underscore-min.js")
   %script(src="/js/libs/backbone-min.js")
   %script(src="/js/libs/buzz.js")
+  %script(src="/js/libs/iscroll.js")
   
   %script(src="/js/mq-player.js")
   %script(src="/js/mq-app.js")
@@ -136,7 +138,11 @@
       if (!buzz.isSupported()){
         $('#mq-container').html('Dein Browser untersützt diese Seite nicht.');
         return;
-      }      
+      }
+      setTimeout(function () {
+        myScroll = new iScroll('mq-area-help-content', {hScroll: false, hScrollbar: false, vScrollbar: false});
+      }, 100);
+      
       window.quotes.reset(#{@quotes.to_json()});
       window.quotes.home();
       qq.render();

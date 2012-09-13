@@ -1,9 +1,4 @@
 $(function() {
-  // TODO:
-  // - include iscroll for impresum/rule and test on phone
-  //----------------------------------------------------------------------------
-  //----------------------------------------------------------------------------
-  //----------------------------------------------------------------------------
   // zepto fallback for click handler instead of tap
   // see https://github.com/madrobby/zepto/issues/409 
   if (!('ontouchend' in window)) {
@@ -98,8 +93,8 @@ $(function() {
     setEvaluated: function(){
       if(_.supports_local_storage()){
         localStorage.setItem(this.get("number"), 'true');
-        this.trigger('evaluated');
       }
+      this.trigger('evaluated');
     },
 
     wasEvaluated: function(){
@@ -125,6 +120,33 @@ $(function() {
         this.current().trigger('stop');
       }
       return this.current();
+    },
+    
+    random: function (stop) {
+      var ri = 0,
+          quote = {},
+          evaluated = {};
+      if (this.length <= 0) {
+        return null;
+      }
+    
+      evaluated = this.filter(function(qq) { return !qq.wasEvaluated(); });
+      if (evaluated.length <= 0) {
+        ri = Math.floor(Math.random() * this.length);
+      } else {
+        // random only for quotes that have not been evaluated, yet
+        ri = Math.floor(Math.random() * evaluated.length);
+        quote = evaluated[ri];
+        ri = this.indexOf(quote);
+      }
+      
+      this.idx = ri;
+      this.current().trigger('chosen');
+      if (stop) {
+        this.current().trigger('hide');
+        this.current().trigger('stop');
+      }
+      return this.current();      
     },
     
     next: function (stop) {
@@ -338,13 +360,24 @@ $(function() {
       this.collection.on('reset', this.reset, this);
       this.collection.on('evaluated', this.render, this);
       
+      $('#mq-area-main').swipeLeft(function(){
+        alert('swipeleft');
+        that.elInput.val('');
+        that.collection.prev(true);        
+      });
+      $('#mq-area-main').swipeRight(function(){
+        alert('swiperight');
+        that.elInput.val('');
+        that.collection.next(true);        
+      });
+      
       this.elNext.tap(function(){
         that.elInput.val('');
         that.collection.next(true);
       });
       this.elHome.tap(function(){
         that.elInput.val('');
-        that.collection.home(true);
+        that.collection.random(true);
       });
       this.elPrev.tap(function(){
         that.elInput.val('');

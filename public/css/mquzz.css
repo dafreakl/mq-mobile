@@ -269,7 +269,9 @@ a.mq-button:hover{
   z-index: 99;
   border: 10px solid #0a0a0b;
   overflow: hidden;
+  /*
   overflow-y: scroll;
+  */
   background-color: #13161a;
   padding-left: 5px;
   padding-right: 5px;
