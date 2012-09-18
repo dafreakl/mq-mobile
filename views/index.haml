@@ -45,15 +45,6 @@
       %ol
         %li
           %div.mq-list-item 1
-          %div.mq-list-item 2
-          %div.mq-list-item 3
-          %div.mq-list-item 4
-          %div.mq-list-item 5          
-          %div.mq-list-item 6
-          %div.mq-list-item 7
-          %div.mq-list-item 8
-          %div.mq-list-item 9
-          %div.mq-list-item 10
       
     %div#mq-area-main.mq-column
       %div#mq-area-request
@@ -154,7 +145,9 @@
     
   %script{ :type => 'text/template', :id => 'mq-tmpl-quotes' }
     <% quotes.each(function(quote){ %>
-    <% if (quote.wasEvaluated()) { %>
+    <% if (quotes.current().id === quote.id) { %>
+    <li data-mq-number='<%= quote.get('number') %>'><div class='mq-box mq-list-item mq-box-current'><%= quote.get('number') %></div></li>
+    <% } else if (quote.wasEvaluated()) { %>
     <li data-mq-number='<%= quote.get('number') %>'><div class='mq-box mq-list-item mq-box-evaluated'><%= quote.get('number') %></div></li>
     <% } else { %>
     <li data-mq-number='<%= quote.get('number') %>'><div class='mq-box mq-list-item'><%= quote.get('number') %></div></li>

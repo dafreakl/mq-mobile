@@ -359,6 +359,7 @@ $(function() {
       this.views = [];
       this.collection.on('reset', this.reset, this);
       this.collection.on('evaluated', this.render, this);
+      this.collection.on('change:current', this.render, this);
       
       $('#mq-area-main').swipeLeft(function(){
         alert('swipeleft');
@@ -420,6 +421,8 @@ $(function() {
           id = ct.attr('data-mq-number');
       this.elInput.val('');
       this.collection.select(id);
+      
+      this.render();
     },
     
     render: function () {

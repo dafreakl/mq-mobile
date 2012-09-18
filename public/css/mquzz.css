@@ -334,6 +334,9 @@ only screen and (min-width: 1024px) {
     .mq-box-evaluated{
 	background-color: #185d77; /*#1d6e8c;*/
     }
+    .mq-box-current{
+	background-color: #fe57a1;
+    }
     #mq-area-main{
         width: 60%;
     }
