@@ -6,7 +6,17 @@ $(function() {
           $(e.target).trigger('tap');
       });
   }
-    
+  // fix swiptleft and right issue
+  // https://github.com/madrobby/zepto/issues/315
+  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+  
+  // Prevent default scrolling on document window
+  MBP.preventScrolling();
+  // Prevent iOS from zooming onfocus
+  MBP.preventZoom();
+  // Hide URL Bar
+  MBP.hideUrlBarOnLoad();
+  
   _.mixin({
     sentence: function (arr, sep, connector) {
       var result = '';
@@ -361,13 +371,11 @@ $(function() {
       this.collection.on('evaluated', this.render, this);
       this.collection.on('change:current', this.render, this);
       
-      $('#mq-area-main').swipeLeft(function(){
-        alert('swipeleft');
+      $('#mq-area-main').swipeRight(function(){
         that.elInput.val('');
         that.collection.prev(true);        
       });
-      $('#mq-area-main').swipeRight(function(){
-        alert('swiperight');
+      $('#mq-area-main').swipeLeft(function(){
         that.elInput.val('');
         that.collection.next(true);        
       });
