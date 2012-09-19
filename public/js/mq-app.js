@@ -6,11 +6,8 @@ $(function() {
           $(e.target).trigger('tap');
       });
   }
-  // fix swiptleft and right issue
+  // fix swiptleft and right issue: Prevent default scrolling on document window
   // https://github.com/madrobby/zepto/issues/315
-  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-  
-  // Prevent default scrolling on document window
   MBP.preventScrolling();
   // Prevent iOS from zooming onfocus
   MBP.preventZoom();
