@@ -19,12 +19,12 @@ $(function () {
         
         var options = {},
             defaults = {
-                width: 155,
-                height: 155,
+                width: 135, //155
+                height: 135, //155
                 iconWidth: 25,
                 iconHeight: 25, //divided by 5 for pause
                 bgcolor: '#0e1013',
-                circleFill: '#13161a',
+                circleFill: '#22262b', //13161a
                 circleBorder: '#0a0a0b',
                 progressFill: '#29a0cb',
                 progressBorder: '#0a0a0b',

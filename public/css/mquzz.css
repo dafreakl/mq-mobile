@@ -153,8 +153,8 @@ a.mq-button:hover{
 }
 #mq-area-hint-v div{
     font-family: RobotoThin;
-    font-size: 0.85em;
-    border-right: 18px solid #29a0cb;
+    font-size: 1em; /*0.85em; */
+    border-right: 30px solid #29a0cb;
     border-top: 1px solid  #29a0cb;
     border-bottom: 1px solid  #29a0cb;
     
@@ -165,10 +165,10 @@ a.mq-button:hover{
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;    
     
-    padding-top: 4px;
+    padding-top: 10px;
     padding-bottom: 4px;
     width: 0px;
-    height: 25px;
+    height: 40px;
     overflow: hidden;
     cursor: pointer;
 }
