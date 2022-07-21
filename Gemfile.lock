@@ -31,9 +31,10 @@ GEM
       tilt (~> 1.3, >= 1.3.3)
     tilt (1.3.3)
     tins (0.4.3)
-    tzinfo (0.3.33)
+    tzinfo (0.3.61)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES
